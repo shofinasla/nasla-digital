@@ -1,7 +1,7 @@
 /**
  * Cloudflare Workers Static Assets Configuration for NASLA DIGITAL
  * Brand: NASLA DIGITAL — Solusi Digital Untuk Masa Depan
- * Apex Domain: nasla.digital
+ * Apex Domain Redirect: nasla.digital
  * Custom Domain: www.nasla.digital
  * Zone ID: d1b484ce93921036c690d193c4edccfb
  * Account ID: 23285908b710e298116f9ce010a44035
@@ -16,5 +16,4 @@
     "not_found_handling": "single-page-application"
   }
 }
-
 

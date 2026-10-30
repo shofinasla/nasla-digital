@@ -10,9 +10,9 @@
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
-    "deploy": "npm run build && wrangler deploy --config wrangler.jsonc",
-    "deploy:cf": "npm run build && wrangler deploy --config wrangler.jsonc",
-    "deploy:worker": "wrangler deploy --config wrangler.jsonc"
+    "deploy": "npm run build && node --env-file=.env ./node_modules/wrangler/bin/wrangler.js deploy --config wrangler.jsonc",
+    "deploy:cf": "npm run build && node --env-file=.env ./node_modules/wrangler/bin/wrangler.js deploy --config wrangler.jsonc",
+    "deploy:worker": "node --env-file=.env ./node_modules/wrangler/bin/wrangler.js deploy --config wrangler.jsonc"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",

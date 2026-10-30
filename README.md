@@ -28,7 +28,7 @@
 18. [SEO](#seo)
 19. [Deployment](#deployment)
     - [Vercel](#vercel)
-    - [Cloudflare Pages](#cloudflare-pages)
+    - [Cloudflare Workers Static Assets](#2-cloudflare-workers-static-assets-dns)
     - [Static Hosting](#static-hosting)
 20. [Reset Demo Data](#reset-demo-data)
 21. [Troubleshooting](#troubleshooting)
@@ -185,7 +185,7 @@ Website ini telah dikonfigurasi penuh dan teroptimasi untuk domain **`www.nasla.
 - **Schema.org Structured Data (JSON-LD):** Type `Organization` & `WebSite` resmi di `index.html`
 - **Robots.txt:** `public/robots.txt` mengarah ke `https://www.nasla.digital/sitemap.xml`
 - **Sitemap XML:** `public/sitemap.xml` berisi seluruh index rute publik
-- **SPA Fallback:** Cloudflare Workers menggunakan `not_found_handling` di `wrangler.jsonc`, sedangkan Cloudflare Pages menangani fallback SPA secara otomatis.
+- **SPA Fallback:** Cloudflare Workers menggunakan `not_found_handling` di `wrangler.jsonc`.
 - **CNAME:** `public/CNAME` siap pakai untuk custom domain hosting.
 
 ---
@@ -200,42 +200,20 @@ Website ini telah dikonfigurasi penuh dan teroptimasi untuk domain **`www.nasla.
    - **CNAME Record:** Host: `www` &rarr; Target: `cname.vercel-dns.com`
    - **A Record:** Host: `@` &rarr; Target: `76.76.21.21`
 
-### 2. Cloudflare Pages & Cloudflare DNS (nasla.digital)
-Website ini telah dikonfigurasi secara spesifik untuk Cloudflare Pages & Zone DNS `nasla.digital`:
+### 2. Cloudflare Workers Static Assets & DNS
+Website ini telah dikonfigurasi untuk Cloudflare Workers Static Assets melalui `wrangler.jsonc`:
 
 - **Account ID:** `23285908b710e298116f9ce010a44035`
 - **Zone ID (nasla.digital):** `d1b484ce93921036c690d193c4edccfb`
 - **Custom Domain:** `www.nasla.digital`
 - **Apex Domain:** `nasla.digital`
 
-#### Cara A: Deploy Otomatis via Cloudflare Dashboard
-1. Buka [Cloudflare Dashboard](https://dash.cloudflare.com) dengan akun Anda (`Account ID: 23285908b710e298116f9ce010a44035`).
-2. Masuk ke **Compute (Workers & Pages)** > **Create application** > Tab **Pages** > **Connect to Git** (atau **Direct Upload** folder `dist`).
-3. Konfigurasi Build Settings:
-   - **Framework Preset:** Vite
-   - **Build command:** `npm run build`
-   - **Build output directory:** `dist`
-4. Setelah build selesai, buka menu **Custom Domains** pada project Pages:
-   - Tambahkan domain: `www.nasla.digital`
-   - Tambahkan apex domain: `nasla.digital` (pilih opsi redirect otomatis ke `www.nasla.digital`)
-
-#### Cara B: Deploy Instan via Wrangler CLI
+#### Deploy via Wrangler CLI
 ```bash
-# 1. Build aplikasi ke production
-npm run build
-
-# 2. Deploy langsung ke Cloudflare (Workers Static Assets atau Pages)
-npm run deploy:cf
+npm run deploy
 ```
-*(Atau gunakan perintah: `npx wrangler deploy` atau `npx wrangler pages deploy dist --project-name=nasla-digital`)*
-*Konfigurasi `wrangler.jsonc` telah diset dengan `"assets": { "directory": "./dist" }` sehingga kompatibel langsung dengan runner Cloudflare modern tanpa missing entry-point error.*
 
-#### Pengaturan DNS Cloudflare (Zone: nasla.digital)
-Pada menu **DNS** > **Records** di zona `nasla.digital`:
-| Type | Name | Content / Target | Proxy status | TTL |
-|------|------|------------------|--------------|-----|
-| CNAME | `www` | `nasla-digital.pages.dev` | Proxied (Orange Cloud) | Auto |
-| CNAME | `@` | `nasla-digital.pages.dev` (atau gunakan Rule redirect) | Proxied (Orange Cloud) | Auto |
+Setelah deploy, tambahkan `www.nasla.digital` sebagai **Custom Domain** pada Worker `nasla-digital`. Untuk mengarahkan domain apex `nasla.digital` ke `www`, buat record DNS dan Redirect Rule di Cloudflare Dashboard; langkah lengkapnya ada di [panduan deployment](./docs/deployment.md#konfigurasi-domain-apex-dan-https).
 
 File `public/_headers` disertakan di dalam folder `dist/` untuk konfigurasi HTTP caching. Fallback SPA Cloudflare Workers ditangani oleh `wrangler.jsonc`; hindari aturan fallback wildcard yang menulis ulang semua request ke `/index.html`, karena dapat menyebabkan loop deployment.
 
