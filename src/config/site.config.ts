@@ -15,6 +15,16 @@ export const SITE_CONFIG = {
   apexDomain: 'nasla.digital',
   logoUrl: '/logo.png',
 
+  // Cloudflare Deployment & DNS Configuration
+  cloudflare: {
+    accountId: '23285908b710e298116f9ce010a44035',
+    zoneId: 'd1b484ce93921036c690d193c4edccfb',
+    zoneName: 'nasla.digital',
+    customDomain: 'www.nasla.digital',
+    projectName: 'nasla-digital',
+    pagesDevUrl: 'https://nasla-digital.pages.dev',
+  },
+
   // DEMO ADMIN CREDENTIALS FOR CMS
   DEMO_ADMIN_EMAIL: 'admin@nasla.digital',
   DEMO_ADMIN_USERNAME: 'admin',

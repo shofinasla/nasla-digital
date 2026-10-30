@@ -208,10 +208,43 @@ Website ini telah dikonfigurasi penuh dan teroptimasi untuk domain **`www.nasla.
    - **CNAME Record:** Host: `www` &rarr; Target: `<nama-site>.netlify.app`
    - **A Record:** Host: `@` &rarr; Target: `75.2.60.5`
 
-### 3. Cloudflare Pages
-1. Hubungkan repo ke Cloudflare Pages, pilih preset build **Vite** (`npm run build`, output: `dist`).
-2. Masuk ke tab **Custom Domains** > **Set up a domain** > masukkan `www.nasla.digital`.
-3. Cloudflare otomatis mengelola sertifikat SSL/TLS gratis dan DNS routing.
+### 3. Cloudflare Pages & Cloudflare DNS (nasla.digital)
+Website ini telah dikonfigurasi secara spesifik untuk Cloudflare Pages & Zone DNS `nasla.digital`:
+
+- **Account ID:** `23285908b710e298116f9ce010a44035`
+- **Zone ID (nasla.digital):** `d1b484ce93921036c690d193c4edccfb`
+- **Custom Domain:** `www.nasla.digital`
+- **Apex Domain:** `nasla.digital`
+
+#### Cara A: Deploy Otomatis via Cloudflare Dashboard
+1. Buka [Cloudflare Dashboard](https://dash.cloudflare.com) dengan akun Anda (`Account ID: 23285908b710e298116f9ce010a44035`).
+2. Masuk ke **Compute (Workers & Pages)** > **Create application** > Tab **Pages** > **Connect to Git** (atau **Direct Upload** folder `dist`).
+3. Konfigurasi Build Settings:
+   - **Framework Preset:** Vite
+   - **Build command:** `npm run build`
+   - **Build output directory:** `dist`
+4. Setelah build selesai, buka menu **Custom Domains** pada project Pages:
+   - Tambahkan domain: `www.nasla.digital`
+   - Tambahkan apex domain: `nasla.digital` (pilih opsi redirect otomatis ke `www.nasla.digital`)
+
+#### Cara B: Deploy Instan via Wrangler CLI
+```bash
+# 1. Build aplikasi ke production
+npm run build
+
+# 2. Deploy langsung ke Cloudflare Pages
+npm run deploy:cf
+```
+*(Atau gunakan perintah: `npx wrangler pages deploy dist --project-name=nasla-digital`)*
+
+#### Pengaturan DNS Cloudflare (Zone: nasla.digital)
+Pada menu **DNS** > **Records** di zona `nasla.digital`:
+| Type | Name | Content / Target | Proxy status | TTL |
+|------|------|------------------|--------------|-----|
+| CNAME | `www` | `nasla-digital.pages.dev` | Proxied (Orange Cloud) | Auto |
+| CNAME | `@` | `nasla-digital.pages.dev` (atau gunakan Rule redirect) | Proxied (Orange Cloud) | Auto |
+
+File `public/_redirects` dan `public/_headers` sudah disertakan di dalam folder `dist/` untuk memastikan routing SPA dan HTTP caching berjalan maksimal.
 
 ### 4. Hosting cPanel / Apache / Nginx
 1. Jalankan `npm run build`.

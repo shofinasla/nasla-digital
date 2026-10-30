@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BusinessConfig } from '../../types';
-import { Building, Phone, Mail, MapPin, CreditCard, Globe } from 'lucide-react';
+import { Building, Phone, Mail, MapPin, CreditCard, Globe, Cloud, ShieldCheck, Copy, Check, ExternalLink } from 'lucide-react';
+import { SITE_CONFIG } from '../../config/site.config';
 
 interface SiteSettingsPanelProps {
   business: BusinessConfig;
@@ -11,6 +12,13 @@ export const SiteSettingsPanel: React.FC<SiteSettingsPanelProps> = ({
   business,
   onChange,
 }) => {
+  const [copiedKey, setCopiedKey] = useState<string | null>(null);
+
+  const handleCopy = (key: string, value: string) => {
+    navigator.clipboard.writeText(value);
+    setCopiedKey(key);
+    setTimeout(() => setCopiedKey(null), 2000);
+  };
   return (
     <div className="space-y-6 animate-fadeIn">
       <div>
@@ -237,6 +245,80 @@ export const SiteSettingsPanel: React.FC<SiteSettingsPanelProps> = ({
               />
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Cloudflare DNS & Hosting Integration Card */}
+      <div className="p-6 rounded-2xl bg-gradient-to-br from-slate-900 via-blue-950/40 to-slate-900 border border-blue-800/40 space-y-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400">
+              <Cloud className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                <span>Cloudflare DNS & Deployment Config</span>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                  Zone Connected
+                </span>
+              </h3>
+              <p className="text-xs text-slate-400">
+                Konfigurasi resmi untuk domain <code className="text-cyan-300 font-mono">www.nasla.digital</code>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+          {/* Account ID */}
+          <div className="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 flex items-center justify-between gap-2">
+            <div className="min-w-0">
+              <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">
+                Cloudflare Account ID
+              </span>
+              <span className="font-mono text-cyan-300 text-xs truncate block font-bold mt-0.5">
+                {SITE_CONFIG.cloudflare.accountId}
+              </span>
+            </div>
+            <button
+              onClick={() => handleCopy('account', SITE_CONFIG.cloudflare.accountId)}
+              className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors cursor-pointer flex-shrink-0"
+              title="Copy Account ID"
+            >
+              {copiedKey === 'account' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+            </button>
+          </div>
+
+          {/* Zone ID */}
+          <div className="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 flex items-center justify-between gap-2">
+            <div className="min-w-0">
+              <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">
+                Cloudflare Zone ID (nasla.digital)
+              </span>
+              <span className="font-mono text-blue-300 text-xs truncate block font-bold mt-0.5">
+                {SITE_CONFIG.cloudflare.zoneId}
+              </span>
+            </div>
+            <button
+              onClick={() => handleCopy('zone', SITE_CONFIG.cloudflare.zoneId)}
+              className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors cursor-pointer flex-shrink-0"
+              title="Copy Zone ID"
+            >
+              {copiedKey === 'zone' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+            </button>
+          </div>
+        </div>
+
+        <div className="p-3.5 rounded-xl bg-blue-950/20 border border-blue-900/40 text-[11px] text-slate-300 space-y-1.5 leading-relaxed">
+          <div className="flex items-center gap-1.5 text-blue-300 font-semibold">
+            <ShieldCheck className="w-4 h-4 text-cyan-400" />
+            <span>Status Konfigurasi Cloudflare & Routing:</span>
+          </div>
+          <p className="text-slate-400">
+            • <strong>Proyek:</strong> <code className="text-cyan-300 font-mono">{SITE_CONFIG.cloudflare.projectName}</code> (Output directory: <code className="text-cyan-300 font-mono">./dist</code>)<br />
+            • <strong>Custom Domain:</strong> <code className="text-cyan-300 font-mono">www.nasla.digital</code> &amp; Apex <code className="text-cyan-300 font-mono">nasla.digital</code><br />
+            • <strong>Wrangler CLI Deploy:</strong> <code className="text-cyan-300 font-mono bg-slate-900 px-1 py-0.5 rounded">npm run deploy:cf</code>
+          </p>
         </div>
       </div>
     </div>
