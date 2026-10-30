@@ -156,6 +156,7 @@ export interface BusinessConfig {
   brandName: string; // "NASLA DIGITAL"
   tagline: string; // "Solusi Digital Untuk Masa Depan"
   logoUrl?: string; // e.g. "/logo.png"
+  websiteUrl?: string; // e.g. "https://www.nasla.digital"
   slogan: string;
   description: string;
   ownerName: string;

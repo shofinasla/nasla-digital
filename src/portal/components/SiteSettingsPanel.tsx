@@ -1,6 +1,6 @@
 import React from 'react';
 import { BusinessConfig } from '../../types';
-import { Building, Phone, Mail, MapPin, CreditCard } from 'lucide-react';
+import { Building, Phone, Mail, MapPin, CreditCard, Globe } from 'lucide-react';
 
 interface SiteSettingsPanelProps {
   business: BusinessConfig;
@@ -102,7 +102,7 @@ export const SiteSettingsPanel: React.FC<SiteSettingsPanelProps> = ({
           ></textarea>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div>
             <label className="text-xs font-bold text-slate-300 block mb-1">
               No. WhatsApp Utama (Format 628xxx)
@@ -123,6 +123,19 @@ export const SiteSettingsPanel: React.FC<SiteSettingsPanelProps> = ({
               type="email"
               value={business.email}
               onChange={(e) => onChange({ ...business, email: e.target.value })}
+              className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
+          </div>
+
+          <div>
+            <label className="text-xs font-bold text-slate-300 block mb-1">
+              Website / Domain Resmi
+            </label>
+            <input
+              type="text"
+              value={business.websiteUrl || 'https://www.nasla.digital'}
+              onChange={(e) => onChange({ ...business, websiteUrl: e.target.value })}
+              placeholder="https://www.nasla.digital"
               className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
           </div>

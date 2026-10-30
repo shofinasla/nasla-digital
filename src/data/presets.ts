@@ -31,6 +31,7 @@ export const presetDigitalAgency: TemplatePreset = {
     brandName: 'NASLA DIGITAL',
     tagline: 'Solusi Digital Untuk Masa Depan',
     logoUrl: '/logo.png',
+    websiteUrl: 'https://www.nasla.digital',
     slogan: 'Membantu Bisnis dan Perusahaan Tumbuh Melalui Solusi Digital Modern, Cepat, dan Berkinerja Tinggi',
     description:
       'NASLA DIGITAL adalah agensi kreatif dan teknologi masa depan yang berdedikasi membangun website berkinerja tinggi, sistem aplikasi web modern, otomasi bisnis terintegrasi, dan strategi pemasaran digital yang berorientasi hasil nyata.',

@@ -3,4 +3,5 @@ Allow: /
 Disallow: /portal
 Disallow: /admin
 
-Sitemap: https://example.com/sitemap.xml
+Sitemap: https://www.nasla.digital/sitemap.xml
+Host: www.nasla.digital

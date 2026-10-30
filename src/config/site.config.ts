@@ -1,6 +1,7 @@
 /**
  * NASLA DIGITAL — Official Website Configuration
  * Tagline: "Solusi Digital Untuk Masa Depan"
+ * Domain: www.nasla.digital
  */
 
 export const SITE_CONFIG = {
@@ -8,12 +9,14 @@ export const SITE_CONFIG = {
   templateVersion: '1.0.0',
   templateAuthor: 'NASLA DIGITAL',
   authorTagline: 'Solusi Digital Untuk Masa Depan',
-  authorWebsite: 'https://nasladigital.com',
-  siteUrl: 'https://nasladigital.com',
+  authorWebsite: 'https://www.nasla.digital',
+  siteUrl: 'https://www.nasla.digital',
+  domain: 'www.nasla.digital',
+  apexDomain: 'nasla.digital',
   logoUrl: '/logo.png',
 
   // DEMO ADMIN CREDENTIALS FOR CMS
-  DEMO_ADMIN_EMAIL: 'admin@nasladigital.com',
+  DEMO_ADMIN_EMAIL: 'admin@nasla.digital',
   DEMO_ADMIN_USERNAME: 'admin',
   DEMO_ADMIN_PASSWORD: 'demo-admin',
   

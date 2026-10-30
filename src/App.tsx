@@ -95,6 +95,29 @@ export default function App() {
     };
   }, []);
 
+  // Sync document title and canonical tag based on active page
+  useEffect(() => {
+    const brand = websiteData.business.brandName || 'NASLA DIGITAL';
+    const titles: Record<string, string> = {
+      home: `${brand} — ${websiteData.business.tagline || 'Solusi Digital Untuk Masa Depan'}`,
+      about: `Tentang Kami — ${brand}`,
+      services: `Layanan & Solusi — ${brand}`,
+      products: `Produk & Katalog — ${brand}`,
+      blog: `Wawasan & Edukasi — ${brand}`,
+      contact: `Hubungi Kami — ${brand}`,
+      portal: `Admin Portal — ${brand}`,
+      '404': `404 Halaman Tidak Ditemukan — ${brand}`,
+    };
+
+    document.title = titles[routeInfo.pageName] || `${brand} — Solusi Digital Untuk Masa Depan`;
+
+    const canonicalLink = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+    if (canonicalLink) {
+      const canonicalPath = routeInfo.pageName === 'home' ? '' : routeInfo.pageName;
+      canonicalLink.href = `https://www.nasla.digital/${canonicalPath}`;
+    }
+  }, [routeInfo.pageName, websiteData.business.brandName, websiteData.business.tagline]);
+
   const handleNavigate = (page: string) => {
     if (page === 'portal' || page === 'admin') {
       window.history.pushState(null, '', '/portal');

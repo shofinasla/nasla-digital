@@ -179,31 +179,44 @@ Palet warna default:
 
 ---
 
-## SEO
-- Meta tags terstruktur di `index.html`
-- File `public/robots.txt`
-- File `public/sitemap.xml`
+## SEO & Custom Domain (www.nasla.digital)
+Website ini telah dikonfigurasi penuh dan teroptimasi untuk domain **`www.nasla.digital`**:
+- **Canonical URL:** `https://www.nasla.digital/`
+- **OpenGraph & Twitter Cards:** Terhubung ke `https://www.nasla.digital/logo.png`
+- **Schema.org Structured Data (JSON-LD):** Type `Organization` & `WebSite` resmi di `index.html`
+- **Robots.txt:** `public/robots.txt` mengarah ke `https://www.nasla.digital/sitemap.xml`
+- **Sitemap XML:** `public/sitemap.xml` berisi seluruh index rute publik
+- **SPA Fallback:** `public/_redirects` memastikan refresh di semua rute (`/about`, `/services`, `/products`, `/blog`, `/contact`) berjalan lancar di Netlify & Cloudflare Pages.
+- **CNAME:** `public/CNAME` siap pakai untuk custom domain hosting.
 
 ---
 
-## Deployment
+## Deployment & Konfigurasi DNS Domain
 
-### Vercel
-1. Buat akun di [vercel.com](https://vercel.com).
-2. Hubungkan repository GitHub Anda atau upload project via Vercel CLI (`vercel`).
-3. Framework akan otomatis terdeteksi sebagai **Vite**. Klik **Deploy**.
+### 1. Vercel
+1. Hubungkan repository ke [Vercel](https://vercel.com) (Framework: **Vite**).
+2. Di Vercel Dashboard, masuk ke menu **Settings** > **Domains**.
+3. Tambahkan domain: `www.nasla.digital` dan redirect apex `nasla.digital` ke `www.nasla.digital`.
+4. Konfigurasi DNS di registrar domain Anda:
+   - **CNAME Record:** Host: `www` &rarr; Target: `cname.vercel-dns.com`
+   - **A Record:** Host: `@` &rarr; Target: `76.76.21.21`
 
-### Netlify
-1. Buka [netlify.com](https://netlify.com).
-2. Masuk ke **Sites** -> **Add new site** -> **Deploy manually**.
-3. Drag & drop folder `dist/` hasil `npm run build`.
+### 2. Netlify
+1. Masuk ke [Netlify](https://netlify.com) > **Domain Management** > **Add custom domain**.
+2. Masukkan `www.nasla.digital`.
+3. Konfigurasi DNS di registrar:
+   - **CNAME Record:** Host: `www` &rarr; Target: `<nama-site>.netlify.app`
+   - **A Record:** Host: `@` &rarr; Target: `75.2.60.5`
 
-### Cloudflare Pages
-1. Masuk ke dashboard Cloudflare Pages.
-2. Hubungkan Git repo, pilih build command `npm run build` dan output directory `dist`.
+### 3. Cloudflare Pages
+1. Hubungkan repo ke Cloudflare Pages, pilih preset build **Vite** (`npm run build`, output: `dist`).
+2. Masuk ke tab **Custom Domains** > **Set up a domain** > masukkan `www.nasla.digital`.
+3. Cloudflare otomatis mengelola sertifikat SSL/TLS gratis dan DNS routing.
 
-### Static Hosting
-Upload seluruh isi folder `dist/` ke root directory hosting cPanel Anda.
+### 4. Hosting cPanel / Apache / Nginx
+1. Jalankan `npm run build`.
+2. Upload seluruh isi folder `dist/` ke folder `public_html` domain `www.nasla.digital`.
+3. File `_redirects` atau `.htaccess` memastikan rewrite SPA ke `index.html`.
 
 ---
 
