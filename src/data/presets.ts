@@ -37,9 +37,9 @@ export const presetDigitalAgency: TemplatePreset = {
       'NASLA DIGITAL adalah agensi kreatif dan teknologi masa depan yang berdedikasi membangun website berkinerja tinggi, sistem aplikasi web modern, otomasi bisnis terintegrasi, dan strategi pemasaran digital yang berorientasi hasil nyata.',
     ownerName: 'Shofi Nasla',
     establishedYear: 2024,
-    legalEntity: 'PT Nasla Digital Nusantara',
-    licenseNumber: 'NIB: 9120002841029 / Kemenkumham RI',
-    taxNumber: 'NPWP: 82.901.442.1-012.000',
+    legalEntity: 'Nasla Digital',
+    licenseNumber: 'NIB: 18012500*****',
+    taxNumber: 'NPWP: -',
     address: {
       street: 'Demak 59552',
       city: 'Jawa Tengah',
