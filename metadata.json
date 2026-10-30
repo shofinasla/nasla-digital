@@ -1,0 +1,11 @@
+{
+  "name": "NASLA DIGITAL — Business Website Template",
+  "description": "Professional multi-purpose business website template with 5 industry presets, product catalog, blog, WhatsApp ordering and modular demo CMS.",
+  "version": "1.0.0",
+  "author": "Nasla Digital",
+  "category": "Business Website Template",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
