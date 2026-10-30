@@ -46,15 +46,7 @@ Website NASLA DIGITAL telah dikonfigurasi penuh untuk **Cloudflare Workers Stati
 
 ---
 
-## Langkah 4: Deploy ke Netlify
-
-1. Buat akun di [netlify.com](https://netlify.com).
-2. Masuk ke tab **Sites** -> **Add new site** -> **Deploy manually**.
-3. Cukup seret (drag and drop) folder `dist` hasil build ke area upload browser.
-4. Website Anda langsung live dalam beberapa detik!
-
----
-
 ## Konfigurasi SPA Fallback (Agar Refresh Tidak 404)
 - **Cloudflare Workers**: Sudah ditangani otomatis oleh `"not_found_handling": "single-page-application"` di `wrangler.jsonc`.
-- **Netlify & Vercel**: Seluruh rute client-side (`/products`, `/services`, `/admin`, dll.) otomatis diarahkan ke `index.html`. Jika menggunakan server Nginx atau Apache konvensional, pastikan URL rewrite diarahkan ke `index.html`.
+- **Cloudflare Pages**: Fallback SPA ditangani otomatis selama tidak ada `404.html` khusus di folder publik.
+- **Vercel**: Rute client-side ditangani otomatis untuk aplikasi Vite. Jika menggunakan server Nginx atau Apache konvensional, pastikan URL rewrite diarahkan ke `index.html`.

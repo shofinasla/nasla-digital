@@ -28,7 +28,6 @@
 18. [SEO](#seo)
 19. [Deployment](#deployment)
     - [Vercel](#vercel)
-    - [Netlify](#netlify)
     - [Cloudflare Pages](#cloudflare-pages)
     - [Static Hosting](#static-hosting)
 20. [Reset Demo Data](#reset-demo-data)
@@ -42,7 +41,7 @@
 ## Product Overview
 **NASLA DIGITAL — Business Website Template** adalah produk digital berupa source code website bisnis siap pakai dan mudah dikustomisasi. Template ini dirancang untuk dapat digunakan oleh berbagai jenis bidang usaha: UMKM, perusahaan korporat, agensi kreatif, kontraktor, kuliner & resto, kantor konsultan, maupun distributor B2B.
 
-Template ini bekerja secara mandiri tanpa ketergantungan pada database backend yang rumit, sehingga pembeli dapat langsung menjalankan dan mendistribusikannya ke web hosting gratis seperti Vercel atau Netlify.
+Template ini bekerja secara mandiri tanpa ketergantungan pada database backend yang rumit, sehingga pembeli dapat langsung menjalankan dan mendistribusikannya ke Cloudflare.
 
 ---
 
@@ -186,7 +185,7 @@ Website ini telah dikonfigurasi penuh dan teroptimasi untuk domain **`www.nasla.
 - **Schema.org Structured Data (JSON-LD):** Type `Organization` & `WebSite` resmi di `index.html`
 - **Robots.txt:** `public/robots.txt` mengarah ke `https://www.nasla.digital/sitemap.xml`
 - **Sitemap XML:** `public/sitemap.xml` berisi seluruh index rute publik
-- **SPA Fallback:** `public/_redirects` memastikan refresh di semua rute (`/about`, `/services`, `/products`, `/blog`, `/contact`) berjalan lancar di Netlify & Cloudflare Pages.
+- **SPA Fallback:** Cloudflare Workers menggunakan `not_found_handling` di `wrangler.jsonc`, sedangkan Cloudflare Pages menangani fallback SPA secara otomatis.
 - **CNAME:** `public/CNAME` siap pakai untuk custom domain hosting.
 
 ---
@@ -201,14 +200,7 @@ Website ini telah dikonfigurasi penuh dan teroptimasi untuk domain **`www.nasla.
    - **CNAME Record:** Host: `www` &rarr; Target: `cname.vercel-dns.com`
    - **A Record:** Host: `@` &rarr; Target: `76.76.21.21`
 
-### 2. Netlify
-1. Masuk ke [Netlify](https://netlify.com) > **Domain Management** > **Add custom domain**.
-2. Masukkan `www.nasla.digital`.
-3. Konfigurasi DNS di registrar:
-   - **CNAME Record:** Host: `www` &rarr; Target: `<nama-site>.netlify.app`
-   - **A Record:** Host: `@` &rarr; Target: `75.2.60.5`
-
-### 3. Cloudflare Pages & Cloudflare DNS (nasla.digital)
+### 2. Cloudflare Pages & Cloudflare DNS (nasla.digital)
 Website ini telah dikonfigurasi secara spesifik untuk Cloudflare Pages & Zone DNS `nasla.digital`:
 
 - **Account ID:** `23285908b710e298116f9ce010a44035`
@@ -245,12 +237,12 @@ Pada menu **DNS** > **Records** di zona `nasla.digital`:
 | CNAME | `www` | `nasla-digital.pages.dev` | Proxied (Orange Cloud) | Auto |
 | CNAME | `@` | `nasla-digital.pages.dev` (atau gunakan Rule redirect) | Proxied (Orange Cloud) | Auto |
 
-File `public/_redirects` dan `public/_headers` sudah disertakan di dalam folder `dist/` untuk memastikan routing SPA dan HTTP caching berjalan maksimal.
+File `public/_headers` disertakan di dalam folder `dist/` untuk konfigurasi HTTP caching. Fallback SPA Cloudflare Workers ditangani oleh `wrangler.jsonc`; hindari aturan fallback wildcard yang menulis ulang semua request ke `/index.html`, karena dapat menyebabkan loop deployment.
 
-### 4. Hosting cPanel / Apache / Nginx
+### 3. Hosting cPanel / Apache / Nginx
 1. Jalankan `npm run build`.
 2. Upload seluruh isi folder `dist/` ke folder `public_html` domain `www.nasla.digital`.
-3. File `_redirects` atau `.htaccess` memastikan rewrite SPA ke `index.html`.
+3. Untuk Apache, gunakan aturan rewrite di `.htaccess` agar rute SPA diarahkan ke `index.html`.
 
 ---
 

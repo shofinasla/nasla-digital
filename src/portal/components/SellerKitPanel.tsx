@@ -89,7 +89,7 @@ export const SellerKitPanel: React.FC<SellerKitPanelProps> = ({ fullDataPayload 
               <strong>Build Production:</strong> Jalankan <code className="text-cyan-300 font-mono bg-slate-800 px-1 py-0.5 rounded">npm run build</code> untuk menghasilkan folder <code className="text-cyan-300 font-mono">dist</code>
             </li>
             <li>
-              <strong>Deploy Gratis:</strong> Upload folder <code className="text-cyan-300 font-mono">dist</code> ke <strong>Vercel</strong>, <strong>Netlify</strong>, atau <strong>Cloudflare Pages</strong>.
+              <strong>Deploy Gratis:</strong> Upload folder <code className="text-cyan-300 font-mono">dist</code> ke <strong>Cloudflare Pages</strong>.
             </li>
           </ol>
         </div>
