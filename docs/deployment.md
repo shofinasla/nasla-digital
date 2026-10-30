@@ -13,7 +13,30 @@ Perintah ini akan mengompilasi dan mengoptimasi seluruh kode ke dalam folder `di
 
 ---
 
-## Langkah 2: Deploy ke Vercel (Rekomendasi)
+## Langkah 2: Deploy ke Cloudflare Workers (Static Assets)
+
+Website NASLA DIGITAL telah dikonfigurasi penuh untuk **Cloudflare Workers Static Assets** melalui file `wrangler.jsonc`.
+
+1. **Jalankan Build dan Deploy via Script:**
+   ```bash
+   npm run deploy
+   ```
+   *Perintah ini secara otomatis menjalankan `npm run build` dan memanggil `wrangler deploy --config wrangler.jsonc`.*
+
+2. **Atau jalankan perintah manual:**
+   ```bash
+   npm run build
+   npx wrangler deploy --config wrangler.jsonc
+   ```
+
+3. **Cloudflare Dashboard & Custom Domain (`www.nasla.digital`):**
+   - Setelah deploy berhasil, buka Cloudflare Dashboard -> **Compute (Workers & Pages)** -> pilih Worker `nasla-digital`.
+   - Masuk ke tab **Settings** -> **Domains & Routes** -> klik **Add** -> pilih **Custom Domain**.
+   - Masukkan `www.nasla.digital` (dan `nasla.digital` jika diinginkan). Cloudflare akan otomatis mengarahkan traffic DNS zone ke Worker Anda.
+
+---
+
+## Langkah 3: Deploy ke Vercel
 
 1. Buat akun di [vercel.com](https://vercel.com) (Gratis).
 2. Install Vercel CLI dengan `npm i -g vercel` ATAU hubungkan repository GitHub Anda.
@@ -23,7 +46,7 @@ Perintah ini akan mengompilasi dan mengoptimasi seluruh kode ke dalam folder `di
 
 ---
 
-## Langkah 3: Deploy ke Netlify
+## Langkah 4: Deploy ke Netlify
 
 1. Buat akun di [netlify.com](https://netlify.com).
 2. Masuk ke tab **Sites** -> **Add new site** -> **Deploy manually**.
@@ -33,4 +56,5 @@ Perintah ini akan mengompilasi dan mengoptimasi seluruh kode ke dalam folder `di
 ---
 
 ## Konfigurasi SPA Fallback (Agar Refresh Tidak 404)
-Untuk Netlify atau Vercel, seluruh rute client-side (`/about`, `/services`, dll.) otomatis diarahkan ke `index.html`. Jika menggunakan server Nginx atau Apache konvensional, pastikan URL rewrite diarahkan ke `index.html`.
+- **Cloudflare Workers**: Sudah ditangani otomatis oleh `"not_found_handling": "single-page-application"` di `wrangler.jsonc`.
+- **Netlify & Vercel**: Seluruh rute client-side (`/products`, `/services`, `/admin`, dll.) otomatis diarahkan ke `index.html`. Jika menggunakan server Nginx atau Apache konvensional, pastikan URL rewrite diarahkan ke `index.html`.

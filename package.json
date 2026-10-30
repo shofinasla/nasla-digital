@@ -10,9 +10,9 @@
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
-    "deploy": "npm run build && npx wrangler deploy",
-    "deploy:cf": "npm run build && npx wrangler deploy",
-    "deploy:pages": "npm run build && npx wrangler pages deploy dist --project-name=nasla-digital"
+    "deploy": "npm run build && wrangler deploy --config wrangler.jsonc",
+    "deploy:cf": "npm run build && wrangler deploy --config wrangler.jsonc",
+    "deploy:worker": "wrangler deploy --config wrangler.jsonc"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
@@ -29,6 +29,7 @@
     "@types/react-dom": "^19.3.0",
     "autoprefixer": "^10.4.21",
     "esbuild": "^0.25.0",
-    "typescript": "^7.0.2"
+    "typescript": "^7.0.2",
+    "wrangler": "^4.0.0"
   }
 }

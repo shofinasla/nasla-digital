@@ -1,5 +1,5 @@
 /**
- * Cloudflare Pages Configuration for NASLA DIGITAL
+ * Cloudflare Workers Static Assets Configuration for NASLA DIGITAL
  * Brand: NASLA DIGITAL — Solusi Digital Untuk Masa Depan
  * Apex Domain: nasla.digital
  * Custom Domain: www.nasla.digital
@@ -11,10 +11,10 @@
   "name": "nasla-digital",
   "compatibility_date": "2025-01-01",
   "account_id": "23285908b710e298116f9ce010a44035",
-  "pages_build_output_dir": "./dist",
   "assets": {
     "directory": "./dist",
     "not_found_handling": "single-page-application"
   }
 }
+
 
