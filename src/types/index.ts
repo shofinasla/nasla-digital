@@ -171,7 +171,7 @@ export interface BusinessConfig {
     postalCode: string;
     gmapsUrl: string;
   };
-  whatsappNumber: string; // e.g. "6281234567890"
+  whatsappNumber: string; // e.g. "6288980863848"
   secondaryWhatsApp?: string;
   email: string;
   phone: string;

@@ -193,10 +193,10 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ business }) => {
                   </div>
                   <div>
                     <span className="text-[10px] font-bold text-emerald-800 uppercase block">
-                      WHATSAPP UTAMA:
+                      WHATSAPP RESMI:
                     </span>
                     <span className="text-sm font-bold text-slate-900 group-hover:text-emerald-700">
-                      +{formatPhoneNumberForWa(business.whatsappNumber)}
+                      {business.phone || `+${formatPhoneNumberForWa(business.whatsappNumber)}`}
                     </span>
                   </div>
                 </a>
@@ -227,8 +227,13 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ business }) => {
                       ALAMAT KANTOR:
                     </span>
                     <span className="text-xs font-semibold text-slate-800 leading-relaxed block">
-                      {business.address.street}, {business.address.city}, {business.address.province}{' '}
-                      {business.address.postalCode}
+                      {business.address.street}
+                      {business.address.city ? `, ${business.address.city}` : ''}
+                      {business.address.province ? `, ${business.address.province}` : ''}
+                      {business.address.postalCode &&
+                      !business.address.street.includes(business.address.postalCode)
+                        ? ` ${business.address.postalCode}`
+                        : ''}
                     </span>
                   </div>
                 </div>

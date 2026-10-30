@@ -150,7 +150,9 @@ export const Footer: React.FC<FooterProps> = ({ business, onNavigate }) => {
               <div className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
                 <span>
-                  {business.address.street}, {business.address.city}
+                  {business.address.street}
+                  {business.address.city ? `, ${business.address.city}` : ''}
+                  {business.address.province ? `, ${business.address.province}` : ''}
                 </span>
               </div>
               <div className="flex items-center gap-2">
@@ -159,7 +161,7 @@ export const Footer: React.FC<FooterProps> = ({ business, onNavigate }) => {
               </div>
               <div className="flex items-center gap-2">
                 <MessageCircle className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>+{formatPhoneNumberForWa(business.whatsappNumber)}</span>
+                <span>{business.phone || `+${formatPhoneNumberForWa(business.whatsappNumber)}`}</span>
               </div>
               <div className="pt-1 text-[11px] text-slate-400">
                 Jam Operasional: {business.operatingHours.days} ({business.operatingHours.hours})

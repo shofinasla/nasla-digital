@@ -11,7 +11,7 @@ export function formatPhoneNumberForWa(phone: string): string {
   if (!cleaned.startsWith('62')) {
     cleaned = '62' + cleaned;
   }
-  return cleaned || '6281234567890';
+  return cleaned || '6288980863848';
 }
 
 export function formatRupiah(amount: number): string {
