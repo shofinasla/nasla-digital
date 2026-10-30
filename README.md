@@ -232,10 +232,11 @@ Website ini telah dikonfigurasi secara spesifik untuk Cloudflare Pages & Zone DN
 # 1. Build aplikasi ke production
 npm run build
 
-# 2. Deploy langsung ke Cloudflare Pages
+# 2. Deploy langsung ke Cloudflare (Workers Static Assets atau Pages)
 npm run deploy:cf
 ```
-*(Atau gunakan perintah: `npx wrangler pages deploy dist --project-name=nasla-digital`)*
+*(Atau gunakan perintah: `npx wrangler deploy` atau `npx wrangler pages deploy dist --project-name=nasla-digital`)*
+*Konfigurasi `wrangler.jsonc` telah diset dengan `"assets": { "directory": "./dist" }` sehingga kompatibel langsung dengan runner Cloudflare modern tanpa missing entry-point error.*
 
 #### Pengaturan DNS Cloudflare (Zone: nasla.digital)
 Pada menu **DNS** > **Records** di zona `nasla.digital`:

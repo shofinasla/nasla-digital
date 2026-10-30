@@ -10,7 +10,9 @@
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
-    "deploy:cf": "npm run build && npx wrangler pages deploy dist --project-name=nasla-digital"
+    "deploy": "npm run build && npx wrangler deploy",
+    "deploy:cf": "npm run build && npx wrangler deploy",
+    "deploy:pages": "npm run build && npx wrangler pages deploy dist --project-name=nasla-digital"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",

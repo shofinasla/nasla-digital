@@ -10,6 +10,11 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "nasla-digital",
   "compatibility_date": "2025-01-01",
+  "account_id": "23285908b710e298116f9ce010a44035",
   "pages_build_output_dir": "./dist",
-  "account_id": "23285908b710e298116f9ce010a44035"
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  }
 }
+
