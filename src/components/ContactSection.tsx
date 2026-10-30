@@ -210,7 +210,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ business }) => {
                   </div>
                   <div>
                     <span className="text-[10px] font-bold text-blue-800 uppercase block">
-                      EMAIL KORESPONDENSI:
+                      EMAIL RESMI:
                     </span>
                     <span className="text-sm font-bold text-slate-900 group-hover:text-blue-700">
                       {business.email}
@@ -258,7 +258,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ business }) => {
               </div>
             </div>
 
-            {/* Verified Bank Account */}
+            {/* Verified Bank Account 
             {business.bankAccount && (
               <div className="p-6 rounded-3xl bg-gradient-to-br from-slate-900 to-[#071A3D] text-white shadow-md space-y-3">
                 <div className="flex items-center justify-between">
@@ -281,6 +281,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ business }) => {
                 </div>
               </div>
             )}
+
+            */}
           </div>
         </div>
       </div>

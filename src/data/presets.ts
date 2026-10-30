@@ -60,11 +60,13 @@ export const presetDigitalAgency: TemplatePreset = {
       hours: '08.30 - 17.30 WIB',
       weekendHours: 'Konsultasi Online Terjadwal',
     },
+    /*
     bankAccount: {
       bankName: 'Bank Central Asia (BCA)',
-      accountNumber: '8735 0192 88',
+      accountNumber: '-',
       accountHolder: 'NASLA DIGITAL',
     },
+    */
   },
   heroConfig: {
     kickerText: 'Solusi Digital Untuk Masa Depan',
