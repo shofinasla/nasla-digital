@@ -1,6 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Testimonial, BusinessConfig } from '../types';
-import { Star, MessageSquare, Plus, CheckCircle2, ShieldCheck, X } from 'lucide-react';
+import {
+  Star,
+  Plus,
+  CheckCircle2,
+  X,
+  ChevronLeft,
+  ChevronRight,
+  Quote,
+  Sparkles,
+} from 'lucide-react';
 
 interface TestimonialsSectionProps {
   testimonials: Testimonial[];
@@ -22,6 +31,85 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
   const [rating, setRating] = useState(5);
   const [serviceOrProduct, setServiceOrProduct] = useState('');
   const [submitted, setSubmitted] = useState(false);
+
+  // Carousel slider state
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [visibleCount, setVisibleCount] = useState(3);
+  const [isPaused, setIsPaused] = useState(false);
+
+  // Touch swipe handling
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
+
+  // Responsive visible cards count
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 640) {
+        setVisibleCount(1);
+      } else if (window.innerWidth < 1024) {
+        setVisibleCount(2);
+      } else {
+        setVisibleCount(3);
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const maxIndex = Math.max(0, testimonials.length - visibleCount);
+
+  // Keep index within bounds if window resizes or items change
+  useEffect(() => {
+    if (currentIndex > maxIndex) {
+      setCurrentIndex(maxIndex);
+    }
+  }, [maxIndex, currentIndex]);
+
+  // Autoplay slider (every 5 seconds)
+  useEffect(() => {
+    if (isPaused || modalOpen || maxIndex === 0) return;
+
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
+    }, 5000);
+
+    return () => clearInterval(timer);
+  }, [isPaused, modalOpen, maxIndex]);
+
+  const handlePrev = () => {
+    setCurrentIndex((prev) => (prev <= 0 ? maxIndex : prev - 1));
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStartX.current === null || touchEndX.current === null) return;
+    const diffX = touchStartX.current - touchEndX.current;
+    const threshold = 40;
+
+    if (diffX > threshold) {
+      // Swiped left -> next
+      handleNext();
+    } else if (diffX < -threshold) {
+      // Swiped right -> prev
+      handlePrev();
+    }
+
+    touchStartX.current = null;
+    touchEndX.current = null;
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,15 +137,21 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
       setComment('');
       setRating(5);
       setServiceOrProduct('');
+      // Jump to the latest testimonial added (beginning of list)
+      setCurrentIndex(0);
     }, 1500);
   };
 
   return (
-    <section className="py-20 lg:py-28 bg-white text-slate-900 relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-20 lg:py-28 bg-white text-slate-900 relative overflow-hidden">
+      {/* Subtle decorative background glow in pure white section */}
+      <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-50/60 rounded-full blur-3xl pointer-events-none -z-0" />
+      <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-cyan-50/60 rounded-full blur-3xl pointer-events-none -z-0" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-16">
-          <div className="text-center md:text-left space-y-2">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 sm:mb-16">
+          <div className="text-center md:text-left space-y-3">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold uppercase tracking-wider">
               <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
               <span>Testimoni Klien</span>
@@ -65,77 +159,170 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight font-heading">
               Kisah Sukses Bersama {business.brandName}
             </h2>
-            <p className="text-slate-600 text-sm sm:text-base max-w-xl">
+            <p className="text-slate-600 text-sm sm:text-base max-w-2xl leading-relaxed">
               Dengarkan langsung ulasan dan pengalaman nyata dari para pengusaha dan mitra yang telah mempercayakan kehadiran digital mereka kepada kami.
             </p>
           </div>
 
-          <button
-            onClick={() => setModalOpen(true)}
-            className="px-5 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-bold flex items-center gap-2 shadow-md cursor-pointer shrink-0"
-          >
-            <Plus className="w-4 h-4" />
-            <span>Tulis Ulasan Anda</span>
-          </button>
+          {/* Action buttons & Slider Controls for Desktop */}
+          <div className="flex flex-wrap items-center justify-center md:justify-end gap-3 shrink-0">
+            <button
+              onClick={() => setModalOpen(true)}
+              className="px-5 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-bold flex items-center gap-2 shadow-md hover:shadow-lg transition-all cursor-pointer"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Tulis Ulasan Anda</span>
+            </button>
+
+            {/* Navigation Arrows */}
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handlePrev}
+                aria-label="Testimoni Sebelumnya"
+                className="w-11 h-11 rounded-xl bg-white border border-slate-200 hover:border-blue-400 hover:bg-blue-50/50 text-slate-700 hover:text-blue-600 flex items-center justify-center transition-all shadow-sm active:scale-95 cursor-pointer"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button
+                onClick={handleNext}
+                aria-label="Testimoni Selanjutnya"
+                className="w-11 h-11 rounded-xl bg-white border border-slate-200 hover:border-blue-400 hover:bg-blue-50/50 text-slate-700 hover:text-blue-600 flex items-center justify-center transition-all shadow-sm active:scale-95 cursor-pointer"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
         </div>
 
-        {/* Testimonial Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {testimonials.map((testi) => (
+        {/* Carousel Viewport Container */}
+        <div
+          className="relative"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
+          <div className="overflow-hidden">
             <div
-              key={testi.id}
-              className="p-8 rounded-3xl bg-slate-50 border border-slate-200/80 hover:border-blue-300 hover:bg-white hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
+              className="flex transition-transform duration-500 ease-out will-change-transform"
+              style={{
+                transform: `translateX(-${currentIndex * (100 / visibleCount)}%)`,
+              }}
             >
-              <div>
-                {/* Rating Stars & Verified Tag */}
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-1">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className={`w-4 h-4 ${
-                          i < testi.rating
-                            ? 'text-amber-400 fill-amber-400'
-                            : 'text-slate-300'
-                        }`}
-                      />
-                    ))}
-                  </div>
+              {testimonials.map((testi) => (
+                <div
+                  key={testi.id}
+                  className="px-3 shrink-0 box-border flex flex-col"
+                  style={{
+                    width: `${100 / visibleCount}%`,
+                  }}
+                >
+                  <div className="h-full p-6 sm:p-8 rounded-3xl bg-slate-50 border border-slate-200/90 hover:border-blue-300 hover:bg-white hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
+                    <div>
+                      {/* Rating Stars & Verified Tag */}
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-1">
+                          {[...Array(5)].map((_, i) => (
+                            <Star
+                              key={i}
+                              className={`w-4 h-4 ${
+                                i < testi.rating
+                                  ? 'text-amber-400 fill-amber-400'
+                                  : 'text-slate-200'
+                              }`}
+                            />
+                          ))}
+                        </div>
 
-                  {testi.verified && (
-                    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-100/80 px-2 py-0.5 rounded-full">
-                      <CheckCircle2 className="w-3 h-3" />
-                      <span>Terverifikasi</span>
-                    </span>
-                  )}
+                        {testi.verified && (
+                          <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-100/90 px-2.5 py-0.5 rounded-full">
+                            <CheckCircle2 className="w-3 h-3" />
+                            <span>Terverifikasi</span>
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Decorative quote badge */}
+                      <div className="mb-3 text-blue-200 group-hover:text-blue-400 transition-colors">
+                        <Quote className="w-6 h-6 rotate-180 opacity-60" />
+                      </div>
+
+                      {/* Comment text */}
+                      <p className="text-slate-700 text-sm sm:text-[15px] leading-relaxed italic mb-6">
+                        "{testi.comment}"
+                      </p>
+                    </div>
+
+                    {/* Author Details */}
+                    <div className="pt-4 border-t border-slate-200/80">
+                      <div className="flex items-center gap-3">
+                        <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-500 text-white font-bold text-sm flex items-center justify-center shrink-0 shadow-sm">
+                          {testi.name.substring(0, 2).toUpperCase()}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <h4 className="text-sm font-bold text-slate-900 truncate font-heading group-hover:text-blue-600 transition-colors">
+                            {testi.name}
+                          </h4>
+                          <p className="text-xs text-slate-500 truncate">
+                            {testi.role} • {testi.company}
+                          </p>
+                          <span className="text-[11px] text-blue-600 font-semibold block truncate mt-0.5">
+                            {testi.serviceOrProduct}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-
-                <p className="text-slate-700 text-sm leading-relaxed italic mb-6">
-                  "{testi.comment}"
-                </p>
-              </div>
-
-              {/* Author Details */}
-              <div className="pt-4 border-t border-slate-200/80">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-600 to-cyan-400 text-white font-bold text-sm flex items-center justify-center shrink-0">
-                    {testi.name.substring(0, 2).toUpperCase()}
-                  </div>
-                  <div className="min-w-0">
-                    <h4 className="text-sm font-bold text-slate-900 truncate font-heading">
-                      {testi.name}
-                    </h4>
-                    <p className="text-xs text-slate-500 truncate">
-                      {testi.role} • {testi.company}
-                    </p>
-                    <span className="text-[10px] text-blue-600 font-medium block">
-                      {testi.serviceOrProduct}
-                    </span>
-                  </div>
-                </div>
-              </div>
+              ))}
             </div>
-          ))}
+          </div>
+        </div>
+
+        {/* Carousel Pagination Dots & Indicators */}
+        <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-between gap-4">
+          {/* Swipe guide on mobile */}
+          <p className="text-xs text-slate-500 flex items-center gap-1.5 sm:order-1">
+            <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+            <span>Geser untuk melihat testimoni lainnya ({currentIndex + 1} dari {maxIndex + 1})</span>
+          </p>
+
+          {/* Dots */}
+          <div className="flex items-center justify-center gap-2 sm:order-2">
+            {Array.from({ length: maxIndex + 1 }).map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setCurrentIndex(idx)}
+                aria-label={`Lihat slide ${idx + 1}`}
+                className={`transition-all duration-300 rounded-full cursor-pointer ${
+                  currentIndex === idx
+                    ? 'w-7 h-2.5 bg-blue-600'
+                    : 'w-2.5 h-2.5 bg-slate-300 hover:bg-slate-400'
+                }`}
+              />
+            ))}
+          </div>
+
+          {/* Mobile slider buttons */}
+          <div className="flex items-center gap-2 sm:hidden sm:order-3">
+            <button
+              onClick={handlePrev}
+              aria-label="Sebelumnya"
+              className="px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 flex items-center gap-1 shadow-sm"
+            >
+              <ChevronLeft className="w-3.5 h-3.5" />
+              <span>Sebelumnya</span>
+            </button>
+            <button
+              onClick={handleNext}
+              aria-label="Selanjutnya"
+              className="px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 flex items-center gap-1 shadow-sm"
+            >
+              <span>Selanjutnya</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
         </div>
       </div>
 
@@ -149,7 +336,7 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
               </h3>
               <button
                 onClick={() => setModalOpen(false)}
-                className="p-2 rounded-lg text-slate-400 hover:text-slate-700"
+                className="p-2 rounded-lg text-slate-400 hover:text-slate-700 cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -263,13 +450,13 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
                   <button
                     type="button"
                     onClick={() => setModalOpen(false)}
-                    className="px-4 py-2.5 rounded-xl text-slate-600 text-xs font-semibold"
+                    className="px-4 py-2.5 rounded-xl text-slate-600 text-xs font-semibold hover:bg-slate-100 cursor-pointer"
                   >
                     Batal
                   </button>
                   <button
                     type="submit"
-                    className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-md cursor-pointer"
+                    className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-md cursor-pointer transition-all"
                   >
                     Kirim Ulasan
                   </button>

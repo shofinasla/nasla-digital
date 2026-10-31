@@ -8,6 +8,7 @@ interface AboutSectionProps {
   visionMission: VisionMissionConfig;
   milestones?: Milestone[];
   onNavigateAbout?: () => void;
+  showValues?: boolean;
 }
 
 export const AboutSection: React.FC<AboutSectionProps> = ({
@@ -15,6 +16,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
   visionMission,
   milestones,
   onNavigateAbout,
+  showValues = false,
 }) => {
   return (
     <section id="about" className="py-20 lg:py-28 bg-white text-slate-900 relative">
@@ -114,34 +116,36 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
           </div>
         </div>
 
-        {/* 4 Core Values */}
-        <div>
-          <div className="text-center max-w-2xl mx-auto mb-10">
-            <h3 className="text-2xl sm:text-3xl font-bold text-slate-900 font-heading">
-              {visionMission.valuesHeading}
-            </h3>
-            <p className="text-slate-600 text-sm sm:text-base mt-2">
-              {visionMission.valuesSubheading}
-            </p>
-          </div>
+        {/* Core Values (if enabled) */}
+        {showValues && (
+          <div>
+            <div className="text-center max-w-2xl mx-auto mb-10">
+              <h3 className="text-2xl sm:text-3xl font-bold text-slate-900 font-heading">
+                {visionMission.valuesHeading}
+              </h3>
+              <p className="text-slate-600 text-sm sm:text-base mt-2">
+                {visionMission.valuesSubheading}
+              </p>
+            </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {visionMission.values.map((val) => (
-              <div
-                key={val.id}
-                className="p-6 rounded-2xl bg-white border border-slate-200 hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-500/5 transition-all group"
-              >
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-200/60 text-blue-600 flex items-center justify-center mb-4 group-hover:bg-blue-600 group-hover:text-white transition-all">
-                  <DynamicIcon name={val.iconName} className="w-6 h-6" />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {visionMission.values.map((val) => (
+                <div
+                  key={val.id}
+                  className="p-6 rounded-2xl bg-white border border-slate-200 hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-500/5 transition-all group"
+                >
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-200/60 text-blue-600 flex items-center justify-center mb-4 group-hover:bg-blue-600 group-hover:text-white transition-all">
+                    <DynamicIcon name={val.iconName} className="w-6 h-6" />
+                  </div>
+                  <h4 className="text-lg font-bold text-slate-900 font-heading mb-2 group-hover:text-blue-600 transition-colors">
+                    {val.title}
+                  </h4>
+                  <p className="text-sm text-slate-600 leading-relaxed">{val.desc}</p>
                 </div>
-                <h4 className="text-lg font-bold text-slate-900 font-heading mb-2 group-hover:text-blue-600 transition-colors">
-                  {val.title}
-                </h4>
-                <p className="text-sm text-slate-600 leading-relaxed">{val.desc}</p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );

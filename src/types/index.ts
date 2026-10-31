@@ -140,6 +140,10 @@ export interface CoreValue {
   title: string;
   desc: string;
   iconName: IconNameType;
+  badge?: string;
+  metric?: string;
+  metricLabel?: string;
+  highlights?: string[];
 }
 
 export interface VisionMissionConfig {

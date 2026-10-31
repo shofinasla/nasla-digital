@@ -146,17 +146,32 @@ export const AboutPage: React.FC<AboutPageProps> = ({
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {visionMission.values.map((val) => (
               <div
                 key={val.id}
-                className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-md transition-all"
+                className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-300 transition-all flex flex-col justify-between"
               >
-                <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-4">
-                  <DynamicIcon name={val.iconName} className="w-6 h-6" />
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                      <DynamicIcon name={val.iconName} className="w-6 h-6" />
+                    </div>
+                    {val.badge && (
+                      <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-100">
+                        {val.badge}
+                      </span>
+                    )}
+                  </div>
+                  <h3 className="text-base font-bold text-slate-900 font-heading mb-2">{val.title}</h3>
+                  <p className="text-xs text-slate-600 leading-relaxed mb-4">{val.desc}</p>
                 </div>
-                <h3 className="text-base font-bold text-slate-900 font-heading mb-2">{val.title}</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">{val.desc}</p>
+                {val.metric && (
+                  <div className="pt-3 border-t border-slate-100 flex items-baseline gap-2">
+                    <span className="text-lg font-extrabold text-blue-600 font-heading">{val.metric}</span>
+                    <span className="text-[11px] text-slate-500">{val.metricLabel}</span>
+                  </div>
+                )}
               </div>
             ))}
           </div>

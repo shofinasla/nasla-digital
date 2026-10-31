@@ -16,6 +16,7 @@ import {
 import { Hero } from '../components/Hero';
 import { TrustSection } from '../components/TrustSection';
 import { AboutSection } from '../components/AboutSection';
+import { PillarsSliderSection } from '../components/PillarsSliderSection';
 import { ServicesSection } from '../components/ServicesSection';
 import { PortfolioSection } from '../components/PortfolioSection';
 import { WhyChooseUsSection } from '../components/WhyChooseUsSection';
@@ -81,9 +82,17 @@ export const HomePage: React.FC<HomePageProps> = ({
         visionMission={visionMission}
         milestones={milestones}
         onNavigateAbout={() => onNavigate('about')}
+        showValues={false}
       />
 
-      {/* 4. Services */}
+      {/* 4. Pilar Nilai & Komitmen Kerja Kami (Slide / Tampilan Bergeser) */}
+      <PillarsSliderSection
+        visionMission={visionMission}
+        brandName={business.brandName}
+        onNavigateContact={() => onNavigate('contact')}
+      />
+
+      {/* 5. Services */}
       <ServicesSection
         business={business}
         services={services}
