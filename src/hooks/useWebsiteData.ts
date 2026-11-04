@@ -67,10 +67,26 @@ const defaultFullData: FullWebsiteData = {
 
 export function useWebsiteData() {
   const [data, setData] = useState<FullWebsiteData>(() => {
-    return StorageService.getItem<FullWebsiteData>(
+    const saved = StorageService.getItem<FullWebsiteData>(
       SITE_CONFIG.STORAGE_KEYS.SITE_DATA,
       defaultFullData
     );
+
+    // Ensure all default testimonials are present even if localStorage had older data
+    if (saved && Array.isArray(saved.testimonials)) {
+      const existingIds = new Set(saved.testimonials.map((t) => t.id));
+      const missingDefaults = defaultFullData.testimonials.filter(
+        (t) => !existingIds.has(t.id)
+      );
+      if (missingDefaults.length > 0) {
+        return {
+          ...saved,
+          testimonials: [...saved.testimonials, ...missingDefaults],
+        };
+      }
+    }
+
+    return saved;
   });
 
   // Sync to LocalStorage on changes
