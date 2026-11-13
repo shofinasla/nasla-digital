@@ -31,7 +31,7 @@ export const SITE_CONFIG = {
   
   // Storage Keys Namespacing
   STORAGE_KEYS: {
-    SITE_DATA: 'nasla_digital_official_site_data_v4',
+    SITE_DATA: 'nasla_digital_official_site_data_v3',
     CART_ITEMS: 'nasla_digital_official_cart_items_v2',
     AUTH_STATE: 'nasla_digital_official_auth_state_v2',
     ACTIVE_THEME: 'nasla_digital_official_theme_state_v2',

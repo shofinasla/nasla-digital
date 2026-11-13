@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   BusinessConfig,
   HeroConfig,
@@ -99,36 +99,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [testimonials, setTestimonials] = useState<Testimonial[]>(initialTestimonials);
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>(initialBlog);
   const [faqs, setFaqs] = useState<FAQItem[]>(initialFaqs);
-
-  useEffect(() => {
-    setBusiness(initialBusiness);
-    setHeroConfig(initialHero);
-    setVisionMission(initialVM);
-    setServices(initialServices);
-    setPricingPlans(initialPricing);
-    setProducts(initialProducts);
-    setWhyChooseUs(initialWhy);
-    setProcessSteps(initialProcess);
-    setTeamMembers(initialTeam);
-    setMilestones(initialMilestones);
-    setTestimonials(initialTestimonials);
-    setBlogPosts(initialBlog);
-    setFaqs(initialFaqs);
-  }, [
-    initialBusiness,
-    initialHero,
-    initialVM,
-    initialServices,
-    initialPricing,
-    initialProducts,
-    initialWhy,
-    initialProcess,
-    initialTeam,
-    initialMilestones,
-    initialTestimonials,
-    initialBlog,
-    initialFaqs,
-  ]);
 
   const handleMasterSave = () => {
     onSaveAll({
