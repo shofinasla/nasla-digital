@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import {
   BusinessConfig,
   HeroConfig,
@@ -67,13 +67,26 @@ const defaultFullData: FullWebsiteData = {
 
 export function useWebsiteData() {
   const [data, setData] = useState<FullWebsiteData>(() => {
-    const saved = StorageService.getItem<FullWebsiteData>(
+    // Purge legacy cached site_data keys (e.g. v3) so stale presets never override official build
+    if (typeof window !== 'undefined') {
+      [
+        'nasla_digital_official_site_data_v1',
+        'nasla_digital_official_site_data_v2',
+        'nasla_digital_official_site_data_v3',
+      ].forEach((legacyKey) => StorageService.removeItem(legacyKey));
+    }
+
+    const saved = StorageService.getItem<FullWebsiteData | null>(
       SITE_CONFIG.STORAGE_KEYS.SITE_DATA,
-      defaultFullData
+      null
     );
 
+    if (!saved) {
+      return defaultFullData;
+    }
+
     // Ensure all default testimonials are present even if localStorage had older data
-    if (saved && Array.isArray(saved.testimonials)) {
+    if (Array.isArray(saved.testimonials)) {
       const existingIds = new Set(saved.testimonials.map((t) => t.id));
       const missingDefaults = defaultFullData.testimonials.filter(
         (t) => !existingIds.has(t.id)
@@ -89,17 +102,13 @@ export function useWebsiteData() {
     return saved;
   });
 
-  // Sync to LocalStorage on changes
-  useEffect(() => {
-    StorageService.setItem(SITE_CONFIG.STORAGE_KEYS.SITE_DATA, data);
-  }, [data]);
-
   const updateAllData = useCallback((newData: FullWebsiteData) => {
+    StorageService.setItem(SITE_CONFIG.STORAGE_KEYS.SITE_DATA, newData);
     setData(newData);
   }, []);
 
   const applyPreset = useCallback((preset: TemplatePreset) => {
-    setData({
+    const presetData: FullWebsiteData = {
       business: preset.business,
       heroConfig: preset.heroConfig,
       visionMission: preset.visionMission,
@@ -113,7 +122,9 @@ export function useWebsiteData() {
       testimonials: preset.testimonials,
       blogPosts: preset.blogPosts,
       faqs: preset.faqs,
-    });
+    };
+    StorageService.setItem(SITE_CONFIG.STORAGE_KEYS.SITE_DATA, presetData);
+    setData(presetData);
   }, []);
 
   const resetToDefault = useCallback(() => {
@@ -132,10 +143,14 @@ export function useWebsiteData() {
       id: `testi-${Date.now()}`,
       date: today,
     };
-    setData((prev) => ({
-      ...prev,
-      testimonials: [newTestimonial, ...prev.testimonials],
-    }));
+    setData((prev) => {
+      const updated: FullWebsiteData = {
+        ...prev,
+        testimonials: [newTestimonial, ...prev.testimonials],
+      };
+      StorageService.setItem(SITE_CONFIG.STORAGE_KEYS.SITE_DATA, updated);
+      return updated;
+    });
   }, []);
 
   return {

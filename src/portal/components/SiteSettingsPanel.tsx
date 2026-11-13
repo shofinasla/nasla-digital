@@ -206,11 +206,15 @@ export const SiteSettingsPanel: React.FC<SiteSettingsPanelProps> = ({
               <label className="text-[11px] text-slate-400 block mb-1">Nama Bank</label>
               <input
                 type="text"
-                value={business.bankAccount.bankName}
+                value={business.bankAccount?.bankName ?? ''}
                 onChange={(e) =>
                   onChange({
                     ...business,
-                    bankAccount: { ...business.bankAccount, bankName: e.target.value },
+                    bankAccount: {
+                      bankName: e.target.value,
+                      accountNumber: business.bankAccount?.accountNumber ?? '',
+                      accountHolder: business.bankAccount?.accountHolder ?? '',
+                    },
                   })
                 }
                 className="w-full px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white"
@@ -220,11 +224,15 @@ export const SiteSettingsPanel: React.FC<SiteSettingsPanelProps> = ({
               <label className="text-[11px] text-slate-400 block mb-1">Nomor Rekening</label>
               <input
                 type="text"
-                value={business.bankAccount.accountNumber}
+                value={business.bankAccount?.accountNumber ?? ''}
                 onChange={(e) =>
                   onChange({
                     ...business,
-                    bankAccount: { ...business.bankAccount, accountNumber: e.target.value },
+                    bankAccount: {
+                      bankName: business.bankAccount?.bankName ?? '',
+                      accountNumber: e.target.value,
+                      accountHolder: business.bankAccount?.accountHolder ?? '',
+                    },
                   })
                 }
                 className="w-full px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white"
@@ -234,11 +242,15 @@ export const SiteSettingsPanel: React.FC<SiteSettingsPanelProps> = ({
               <label className="text-[11px] text-slate-400 block mb-1">Atas Nama (A/N)</label>
               <input
                 type="text"
-                value={business.bankAccount.accountHolder}
+                value={business.bankAccount?.accountHolder ?? ''}
                 onChange={(e) =>
                   onChange({
                     ...business,
-                    bankAccount: { ...business.bankAccount, accountHolder: e.target.value },
+                    bankAccount: {
+                      bankName: business.bankAccount?.bankName ?? '',
+                      accountNumber: business.bankAccount?.accountNumber ?? '',
+                      accountHolder: e.target.value,
+                    },
                   })
                 }
                 className="w-full px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white"

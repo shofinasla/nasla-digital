@@ -188,7 +188,7 @@ export interface BusinessConfig {
     hours: string;
     weekendHours: string;
   };
-  bankAccount: {
+  bankAccount?: {
     bankName: string;
     accountNumber: string;
     accountHolder: string;
